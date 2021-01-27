@@ -1,4 +1,4 @@
-# crud-frontend
+# vuejs crud
 
 ## Project setup
 ```
