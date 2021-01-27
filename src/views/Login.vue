@@ -3,15 +3,21 @@
         <div class="card login-form">
             <div class="card-body" v-if="showFrom=='login'">
                 <h3 class="card-title text-center">Log in to crud app</h3>
+                <div class="alert alert-danger" role="alert" v-if="errorMessage.length > 0">
+                    {{errorMessage}}
+                </div>
+                <div class="alert alert-success" role="alert" v-if="successMessage != null">
+                    {{ successMessage }}
+                </div>
                 <div class="card-text">
-                    <form method="post">
+                    <form method="post" @submit.prevent="userLogin()">
                         <div class="mb-3">
-                            <label for="exampleInputEmail1">Email address</label>
-                            <input type="email" class="form-control form-control-sm" id="exampleInputEmail1" aria-describedby="emailHelp">
+                            <label for="email">Email address</label>
+                            <input v-model="login.email" type="email" class="form-control form-control-sm" id="email" aria-describedby="emailHelp">
                         </div>
                         <div class="mb-3">
-                            <label for="exampleInputPassword1">Password</label>
-                            <input type="password" class="form-control form-control-sm" id="exampleInputPassword1">
+                            <label for="password">Password</label>
+                            <input v-model="login.password" type="password" class="form-control form-control-sm" id="password">
                         </div>
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary">Sign in</button>
@@ -26,21 +32,27 @@
             <div class="card-body" v-if="showFrom=='registration'">
                 <h3 class="card-title text-center">Registration to crud app</h3>
                 <div class="card-text">
-                    <form method="post">
+                    <div class="alert alert-danger" role="alert" v-if="errorMessage.length > 0">
+                        <li v-for="(error,ind) in errorMessage" :key="ind">{{ error }}</li>
+                    </div>
+                    <div class="alert alert-success" role="alert" v-if="successMessage != null">
+                        {{ successMessage }}
+                    </div>
+                    <form method="post" @submit.prevent="userRegistration()">
                         <div class="mb-3">
                             <label for="name">Name</label>
-                            <input type="text" class="form-control form-control-sm" id="name" aria-describedby="emailHelp">
+                            <input v-model="registration.name" type="text" class="form-control form-control-sm" id="name" aria-describedby="emailHelp">
                         </div>
                         <div class="mb-3">
-                            <label for="exampleInputEmail1">Email address</label>
-                            <input type="email" class="form-control form-control-sm" id="exampleInputEmail1" aria-describedby="emailHelp">
+                            <label for="email">Email address</label>
+                            <input v-model="registration.email" type="email" class="form-control form-control-sm" id="email" aria-describedby="emailHelp">
                         </div>
                         <div class="mb-3">
-                            <label for="exampleInputPassword1">Password</label>
-                            <input type="password" class="form-control form-control-sm" id="exampleInputPassword1">
+                            <label for="password">Password</label>
+                            <input v-model="registration.password" type="password" class="form-control form-control-sm" id="password">
                         </div>
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">Sign in</button>
+                            <button type="submit" class="btn btn-primary">Registration</button>
                         </div>
                         
                         <div class="footer">
@@ -55,10 +67,47 @@
 <script>
 export default {
     data: () => ({
-        showFrom: 'login'
+        showFrom: 'login',
+        registration: {
+            name: '',
+            email: '',
+            password: ''
+        },
+        login: {
+            email: '',
+            password: ''
+        },
+        errorMessage: [],
+        successMessage: null
     }),
     methods: {
+        userRegistration: function() {
+            this.errorMessage = [];
+            this.successMessage = null;
+            this.$store.dispatch('auth/registration', this.registration).then((res) => {
+                this.successMessage = res;
+                this.clearForm();
+            }).catch((error) => {
+                this.errorMessage = error;
+            })
+        },
 
+        userLogin: function() {
+            this.errorMessage = [];
+            this.successMessage = null;
+            this.$store.dispatch('auth/login', this.login).then(response => {
+                this.$router.push('/');
+            })
+            .catch(error => this.errorMessage = error);
+        },
+
+        clearForm: function() {
+            this.registration= {
+                name: '',
+                email: '',
+                password: ''
+            }
+        }
     }
 }
 </script>

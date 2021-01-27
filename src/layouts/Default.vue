@@ -10,11 +10,11 @@
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Mohammad Hasan Sheikh
+                                {{user.name}}
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <li>
-                                    <a class="dropdown-item" href="#">Logout</a>
+                                    <a class="dropdown-item" href="#" @click.prevent="logout()">Logout</a>
                                 </li>
                             </ul>
                         </li>
@@ -27,6 +27,21 @@
 </template>
 <script>
 export default {
-    name: "Default"
+    name: "Default",
+    data: () => ({
+        user: {
+            name: ''
+        }
+    }),
+    created() {
+        this.user = this.$store.getters['auth/user'];
+    },
+    methods: {
+        logout: function() {
+            this.$store.dispatch('auth/logout').then(res => {
+                this.$router.push("login");
+            }).catch(error => alert(error))
+        }
+    }
 }
 </script>

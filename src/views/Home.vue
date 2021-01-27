@@ -1,5 +1,4 @@
 <template>
-  
   <div class="container">
     <div class="row">
       <h3 class="text-center p-2">Welcome crud app</h3>
