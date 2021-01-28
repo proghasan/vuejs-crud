@@ -9,7 +9,7 @@ async function guard(to, from, next){
     }
   }).then(res => null)
     .catch(e => {
-      if(e.response.statusText == 'Unauthorized'){
+      if(e.response.data.message == 'unauthorize'){
         localStorage.removeItem('_accessToken')
         localStorage.removeItem('_userData');
         token = null;
@@ -42,6 +42,11 @@ const routes = [
       {
         path: '/product',
         name: 'Product',
+        component: () => import(/* webpackChunkName: "product" */ '../views/Product.vue')
+      },
+      {
+        path: '/edit-product/:id',
+        name: 'EditProduct',
         component: () => import(/* webpackChunkName: "product" */ '../views/Product.vue')
       },
     ]
