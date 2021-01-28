@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="row">
-      <h3 class="text-center p-5"> {{ product.id == 0 ? 'Entry' : 'Update'}} new product.</h3>
+      <h3 class="text-center p-5"> {{ product.id == 0 ? 'Entry new' : 'Update'}} product.</h3>
       <div class="alert alert-danger" role="alert" v-if="errorMessages.length > 0">
           <li v-for="(error,ind) in errorMessages" :key="ind">{{ error }}</li>
       </div>
